@@ -1,7 +1,7 @@
 import jwt
 import pytest
 
-from .db import client
+from .conftest import client
 from .. import schemas
 from ..config import settings
 

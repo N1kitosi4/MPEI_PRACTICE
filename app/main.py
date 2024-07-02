@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import posts, users, auth, votes
+from app.routers import posts, users, auth, votes
 from app.pages.router import router as pages_router
 
 app = FastAPI(title="MPEI_PRACTICE")

@@ -1,9 +1,9 @@
 import jwt
 import pytest
 
-from .conftest import client
-from .. import schemas
-from ..config import settings
+from app.tests.conftest import client
+from app import schemas
+from app.config import settings
 
 
 def test_create(client):

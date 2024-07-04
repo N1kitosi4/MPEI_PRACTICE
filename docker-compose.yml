@@ -1,0 +1,30 @@
+version: "3.5"
+services:
+  api:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - 8000:8000
+    volumes:
+      - ./:/usr/src/app:ro
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - DATABASE_HOSTNAME=localhost
+      - DATABASE_PASSWORD=1234
+      - DATABASE_NAME=heh_test
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PORT=5432
+      - SECRET_KEY=fd1d44c2ea01d65129d71f8fe0636779d945bcec90fc51bdfb1a4ef3a1a70d5b
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=heh_test
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+volumes:
+  postgres-db:

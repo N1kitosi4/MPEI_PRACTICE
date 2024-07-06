@@ -1,12 +1,8 @@
-from datetime import time
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from psycopg2.extras import RealDictCursor
-
+from app.config import settings
 from app.routers import posts, users, auth, votes
 from app.pages.router import router as pages_router
-import psycopg2
 
 app = FastAPI(title="MPEI_PRACTICE")
 
@@ -31,14 +27,11 @@ app.include_router(pages_router)
 
 @app.get("/")
 def info():
-    try:
-        conn = psycopg2.connect(host='localhost', database='heh', user='postgres',
-                                password='1234', cursor_factory=RealDictCursor)
-        cursor = conn.cursor()
-        print("Database connection was succesfull!")
-        cursor.execute("SELECT * FROM users")
-        users = cursor.fetchall()
-    except Exception as error:
-        print("Connecting to database failed")
-        print("Error: ", error)
-    return {"users": users}
+    return {
+        "db": {"port": settings.database_port,
+               "db_name": settings.database_name,
+               "pass": settings.database_password,
+               "host": settings.database_hostname,
+               "db_username": settings.database_username
+               }
+    }

@@ -2,10 +2,12 @@ version: "3"
 services:
   api:
     build: .
-    depends_on:
-      - db
     ports:
       - 8000:8000
+    volumes:
+      - ./:/usr/src/app
+    # env_file:
+    #     - ./.env
     environment:
       - DATABASE_HOSTNAME=db
       - DATABASE_PASSWORD=1234
@@ -15,10 +17,35 @@ services:
       - SECRET_KEY=fd1d44c2ea01d65129d71f8fe0636779d945bcec90fc51bdfb1a4ef3a1a70d5b
       - ALGORITHM=HS256
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload && alembic upgrade head
+    depends_on:
+      db:
+        condition: service_healthy
 
   db:
-    image: postgres:16
+    image: postgres
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=heh
-      - POSTGRES_USER=postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: heh
+      POSTGRES_USER: postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d heh" ]
+      interval: 10s
+      retries: 5
+      timeout: 10s
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+    ports:
+      - "5050:80"
+
+volumes:
+  postgres-db:

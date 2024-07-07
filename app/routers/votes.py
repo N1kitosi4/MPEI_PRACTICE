@@ -16,11 +16,15 @@ def vote(vote: schemas.Vote,
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Post with id: {vote.post_id} does not exist")
-
+    if post.published is False:
+        raise HTTPException(status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                            detail=f"Post with id: {vote.post_id} does not published")
     vote_query = db.query(models.Vote).filter(
         models.Vote.post_id == vote.post_id, models.Vote.user_id == current_user.id)
 
+
     found_vote = vote_query.first()
+
     if vote.dir == 1:
         if found_vote:
             raise HTTPException(status_code=status.HTTP_409_CONFLICT,

@@ -20,7 +20,6 @@ def get_posts(db: Session = Depends(get_db),
     return posts
 
 
-
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
 def create_posts(post: schemas.PostCreate,
                  db: Session = Depends(get_db),

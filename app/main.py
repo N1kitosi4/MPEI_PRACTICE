@@ -6,9 +6,9 @@ from app.pages.router import router as pages_router
 
 app = FastAPI(title="MPEI_PRACTICE")
 
-origins=["http://localhost",
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",]
+origins = ["http://localhost",
+           "http://localhost:8000",
+           "http://127.0.0.1:8000", ]
 
 app.add_middleware(
     CORSMiddleware,

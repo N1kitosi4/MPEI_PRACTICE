@@ -91,10 +91,10 @@ def test_posts(test_user, session, test_user2):
         "user_id": test_user['id']
     },
         {
-        "title": "3rd title",
-        "content": "3rd content",
-        "user_id": test_user['id']
-    },
+            "title": "3rd title",
+            "content": "3rd content",
+            "user_id": test_user['id']
+        },
         {
             "title": "3rd title",
             "content": "3rd content",
